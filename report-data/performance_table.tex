@@ -1,0 +1,35 @@
+\begin{table}[H]
+\setlength{\tabcolsep}{6pt}
+\centering
+\begin{threeparttable}
+\caption{Benchmark results for selected test instances}
+\label{tab:bench}
+\begin{tabular}{l l r r r}
+\toprule
+Test Dataset & Algorithm & States Explored & Time (s) & Peak Memory (KB) \\
+\midrule
+\textbf{test-vis13} & BFS & 369 & 0.1499 & 1,918.0 \\
+ & A* & 10 & 0.0054 & 75.4 \\
+\addlinespace
+\textbf{liam-test-vis5} & BFS & T.O. & T.O. & - \\
+ & A* & 3,256 & 6.4162 & 40,034.2 \\
+\addlinespace
+\textbf{ed-test-vis1} & BFS & 602,596 & 132.0783 & 524,017.2 \\
+ & A* & 83,877 & 20.1067 & 92,482.4 \\
+\addlinespace
+\textbf{ed-test-vis2} & BFS & T.O. & T.O. & - \\
+ & A* & 7,950 & 7.1775 & 87,262.0 \\
+\addlinespace
+\textbf{ed-test-vis3} & BFS & T.O. & T.O. & - \\
+ & A* & 68,574 & 69.9697 & 677,277.3 \\
+\addlinespace
+\textbf{ed-test-vis4} & BFS & T.O. & T.O. & - \\
+ & A* & 87,658 & 70.0849 & 679,569.7 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Note:} T.O. = timeout (6 min). Simple cases (near-zero metrics) omitted; only complex instances shown for meaningful comparison.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

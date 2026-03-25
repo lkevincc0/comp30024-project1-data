@@ -1,0 +1,14 @@
+test_name,expected_steps
+test-vis1.csv,2
+test-vis2.csv,2
+test-vis3.csv,2
+test-vis4.csv,1
+test-vis5.csv,1
+test-vis6.csv,3
+test-vis7.csv,None
+test-vis8.csv,1
+test-vis9.csv,5
+test-vis10.csv,1
+test-vis11.csv,1
+test-vis12.csv,5
+test-vis13.csv,4
