@@ -1,35 +1,32 @@
 \begin{table}[H]
-\setlength{\tabcolsep}{6pt}
 \centering
+\footnotesize
+%\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{14pt}
 \begin{threeparttable}
-\caption{Benchmark results for selected test instances}
+\caption{Performance Comparison: BFS vs. A* Search}
 \label{tab:bench}
-\begin{tabular}{l l r r r}
+\begin{tabular}{c c c c c c c}
 \toprule
-Test Dataset & Algorithm & States Explored & Time (s) & Peak Memory (KB) \\
+ & \multicolumn{2}{c}{States Explored} & \multicolumn{2}{c}{Time (s)} & \multicolumn{2}{c}{Peak Memory (KB)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Test Case & BFS & A* & BFS & A* & BFS & A* \\
 \midrule
-\textbf{test-vis13} & BFS & 369 & 0.1499 & 1,918.0 \\
- & A* & 10 & 0.0054 & 75.4 \\
-\addlinespace
-\textbf{liam-test-vis5} & BFS & T.O. & T.O. & - \\
- & A* & 3,256 & 6.4162 & 40,034.2 \\
-\addlinespace
-\textbf{ed-test-vis1} & BFS & 602,596 & 132.0783 & 524,017.2 \\
- & A* & 83,877 & 20.1067 & 92,482.4 \\
-\addlinespace
-\textbf{ed-test-vis2} & BFS & T.O. & T.O. & - \\
- & A* & 7,950 & 7.1775 & 87,262.0 \\
-\addlinespace
-\textbf{ed-test-vis3} & BFS & T.O. & T.O. & - \\
- & A* & 68,574 & 69.9697 & 677,277.3 \\
-\addlinespace
-\textbf{ed-test-vis4} & BFS & T.O. & T.O. & - \\
- & A* & 87,658 & 70.0849 & 679,569.7 \\
+test-vis6 & 39 & 7 & 0.007 & 0.002 & 90 & 21 \\
+test-vis9 & 15 & 5 & 0.001 & 0.0004 & 13 & 6 \\
+test-vis12 & 268 & 14 & 0.04 & 0.003 & 394 & 31 \\
+test-vis13 & 369 & 10 & 0.15 & 0.005 & 1,918 & 75 \\
+liam-test-vis4 & 241 & 18 & 0.09 & 0.01 & 1,308 & 157 \\
+liam-test-vis5 & T.O. & 3,256 & T.O. & 6.42 & - & 40,034 \\
+ed-test-vis1 & 602,596 & 83,877 & 132.08 & 20.11 & 524,017 & 92,482 \\
+ed-test-vis2 & T.O. & 7,950 & T.O. & 7.18 & - & 87,262 \\
+ed-test-vis3 & T.O. & 68,574 & T.O. & 69.97 & - & 677,277 \\
+ed-test-vis4 & T.O. & 87,658 & T.O. & 70.08 & - & 679,570 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
-\small
-\item \textit{Note:} T.O. = timeout (6 min). Simple cases (near-zero metrics) omitted; only complex instances shown for meaningful comparison.
+\scriptsize
+\item T.O. = Timeout (6 min). A* explores significantly fewer states and uses less memory than BFS, especially on complex instances.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
