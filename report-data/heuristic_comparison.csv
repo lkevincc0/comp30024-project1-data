@@ -12,9 +12,9 @@ test-data/test-vis10.csv,1,0.0002,5.0,True,1,0.0002,5.0,True
 test-data/test-vis11.csv,1,0.0002,5.3,True,1,0.0003,5.2,True
 test-data/test-vis12.csv,145,0.0185,233.5,True,14,0.0024,30.4,True
 test-data/test-vis13.csv,84,0.0273,446.5,True,10,0.0051,71.1,True
-test-data/liam-test-vis3.csv,1,0.0,1.5,True,1,0.0001,1.4,True
-test-data/liam-test-vis4.csv,156,0.0586,841.7,True,18,0.0101,149.7,True
-test-data/liam-test-vis5.csv,-1,15,-1,False,3256,4.199,138094.9,True
+test-data/test-vis14.csv,1,0.0,1.5,True,1,0.0001,1.4,True
+test-data/test-vis15.csv,156,0.0586,841.7,True,18,0.0101,149.7,True
+test-data/test-vis16.csv,-1,15,-1,False,3256,4.199,138094.9,True
 test-data/ed-test-vis1.csv,-1,15,-1,False,-1,15,-1,False
 test-data/ed-test-vis2.csv,-1,15,-1,False,7950,9.6972,140798.0,True
 test-data/ed-test-vis3.csv,-1,15,-1,False,-1,15,-1,False
