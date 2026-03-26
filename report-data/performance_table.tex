@@ -1,0 +1,32 @@
+\begin{table}[H]
+\centering
+\footnotesize
+%\renewcommand{\arraystretch}{1.1}
+\setlength{\tabcolsep}{14pt}
+\begin{threeparttable}
+\caption{Performance Comparison: BFS vs. A* Search}
+\label{tab:bench}
+\begin{tabular}{c c c c c c c}
+\toprule
+ & \multicolumn{2}{c}{States Explored} & \multicolumn{2}{c}{Time (s)} & \multicolumn{2}{c}{Peak Memory (KB)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Test Case & BFS & A* & BFS & A* & BFS & A* \\
+\midrule
+test-vis6 & 39 & 7 & 0.014 & 0.004 & 96 & 24 \\
+test-vis9 & 15 & 5 & 0.002 & 0.001 & 14 & 7 \\
+test-vis12 & 268 & 14 & 0.076 & 0.005 & 408 & 37 \\
+test-vis13 & 369 & 10 & 0.305 & 0.011 & 1,948 & 83 \\
+test-vis15 & 241 & 18 & 0.193 & 0.021 & 1,408 & 171 \\
+test-vis16 & T.O. & 3,218 & T.O. & 7.338 & - & 39,652 \\
+ed-test-vis1 & 603,151 & 82,733 & 167.388 & 26.503 & 524,573 & 99,507 \\
+ed-test-vis2 & T.O. & 3,874 & T.O. & 4.084 & - & 36,906 \\
+ed-test-vis3 & T.O. & 67,663 & T.O. & 87.154 & - & 678,961 \\
+ed-test-vis4 & T.O. & 87,570 & T.O. & 87.050 & - & 683,530 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\scriptsize
+\item T.O. = Timeout (360 Seconds). A* explores significantly fewer states and uses less memory than BFS, especially on complex instances.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

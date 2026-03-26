@@ -1,0 +1,93 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathpazo}
+\usepackage{scrextend}
+\changefontsizes{11pt}
+\usepackage{microtype}
+
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.15}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{caption}
+
+\usepackage{xurl}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[authoryear, round]{natbib}
+\usepackage{parskip}
+
+% Patch llncs \subparagraph to be compatible with titlesec
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}{3.25ex \@plus1ex \@minus .2ex}{-1em}{\normalfont\normalsize\bfseries}}
+\makeatother
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{2.5ex plus 1ex minus .5ex}{1.5ex plus .5ex}
+\titlespacing*{\subsection}{0pt}{1.8ex plus .5ex minus .5ex}{1ex plus .2ex}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+
+\begin{document}
+
+\title{COMP30024 Project A Report}
+\author{Liam Zefu Li \hspace{4cm} Jinbao Liu}
+\authorrunning{L. Z. Li and J. Liu}
+\institute{\email{liamzefu.li@student.unimelb.edu.au \quad jinbaol@student.unimelb.edu.au}}
+
+\maketitle
+\thispagestyle{fancy}
+
+\section{Search Strategy Implementation}
+This project implements two search algorithms: Breadth-First Search (BFS) and A* Search.
+
+\subsection{BFS Implementation}
+Our BFS uses a \texttt{collections.deque} as the FIFO queue, where each node stores a \texttt{GameState} and the action sequence that produced it. The board is a sparse \texttt{dict[Coord,\,CellState]} (empty cells omitted). For duplicate detection, \texttt{GameState} is made hashable via a cached \texttt{frozenset} of its items, enabling $O(1)$ membership checks in a \texttt{set}. An early goal test returns the solution immediately when a successor has no BLUE tokens. Since every action costs~1, BFS guarantees optimality. Worst-case time: $O(|V| \cdot b)$ where $|V|$ is the number of reachable states and $b$ the branching factor (up to $|R| \times 4 \times 3$). Space: $O(|V|)$.
+
+\subsection{A* Search Implementation}
+Our A$^*$ search algorithm utilises a \textit{min-heap} as the priority queue (open list). At each step, the node with the smallest $f(n) = g(n) + h(n)$ is popped for expansion. When multiple nodes share the same $f$ value, a monotonically increasing counter is used as a tie-breaker to preserve FIFO ordering among equal-priority nodes. We also maintain a dictionary (\texttt{g\_score}) mapping each visited \texttt{GameState} to its best-known $g$-value. This allows $O(1)$ lookup and update, and avoids re-expanding a state at a higher cost.
+
+The worst-case time and space complexity is $O(b^d)$, where $b$ is the branching factor and $d$ is the solution depth. In practice, however, the heuristic prunes large portions of the search tree, so the actual cost is substantially lower than uninformed BFS.
+
+\subsection{Heuristic Function Design}
+Our heuristic for A$^*$ is composed of three admissible components:
+\begin{equation}
+    \label{eq:heuristic_new}
+    h(s) = N_{\text{blue}}(s) + C_{\text{travel}}(s) + P_{\text{height}}(s)
+\end{equation}
+
+$N_{\text{blue}}$ (base cost) equals the number of remaining BLUE stacks; each requires $\geq 1$ action to eliminate, so this never overestimates.
+$C_{\text{travel}}$ (travel cost) captures the overhead of reaching the hardest-to-reach BLUE stack. For each RED--BLUE pair with Manhattan distance $M$, we compute $\min(\max(0, M{-}1),\; 1 + \max(0, M{-}1{-}h_r))$ where $h_r$ is the RED height, take the minimum over all RED stacks per BLUE stack, then the maximum over all BLUE stacks. This never overestimates as it ignores obstacles and assumes independent RED stacks.
+$P_{\text{height}}$ adds 1 if the tallest BLUE exceeds the tallest RED (a merge is required first), otherwise 0.
+The sum remains admissible because the three components estimate non-overlapping costs: elimination actions, travel overhead, and a necessary merge step.
+
+Table~1 \cite{comp30024-project1-data} records the performance difference between A$^*$ and breadth-first search. In our basic tests (test-vis* series), A$^*$ shows significant speedup. For example, in test-vis12, BFS explores 268 states while A$^*$ explores only 14---a reduction of about 19$\times$. In test-vis13, BFS explores 369 states versus 10 for A$^*$, a 37$\times$ reduction. On harder cases, the advantage is more pronounced: in liam-test-vis5, BFS cannot find a solution within the 6-minute timeout, but A$^*$ solves it in 6.4 seconds. In ed-test-vis1, BFS takes 132 seconds exploring 600k states, while A$^*$ finishes in 20 seconds with about 83k states---roughly a 6.5$\times$ speedup. Furthermore, in ed-test-vis2, 3 and 4, BFS times out entirely, but A$^*$ finds all solutions successfully. In conclusion, through the heuristic function, A$^*$ substantially reduces the number of explored states, time, and memory compared with BFS, while both algorithms return solutions of identical (optimal) length on all test cases where both complete.
+
+\input{performance_table}
+
+\section{Hypothetical Scenario: Concurrent Stack Operations}
+If all RED stacks acted simultaneously each turn, the problem changes in three ways.
+
+\textbf{1. Branching factor explosion:} RED must assign an action to \emph{every} stack per turn. With $|R|$ stacks and $b_i$ options each, the branching factor grows from $\sum b_i$ to $\prod b_i$ (e.g., 4~stacks with 8~actions each: 32 vs.\ 4\,096).
+
+\textbf{2. Action conflicts:} concurrent actions can interfere---two stacks moving to the same cell, or a CASCADE pushing a stack another action targets. A conflict-resolution policy (fixed ordering or rejecting invalid joint actions) must be defined.
+
+\textbf{3. Required modifications:} the action generator must enumerate \emph{joint action tuples} (one per RED stack, including ``no-op''). The transition function applies all actions atomically with conflict handling. The heuristic can be tightened: $C_{\text{travel}}$ can be divided by $|R|$ since stacks move in parallel, remaining admissible. The core A$^*$ framework still applies, but the combinatorial explosion may require techniques such as decoupled multi-agent search or macro-actions to stay tractable.
+
+
+\bibliographystyle{apalike}
+\bibliography{github_data_reference}
+\end{document}
